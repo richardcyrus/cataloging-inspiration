@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css" type="text/css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript"></script>
+
+  <title>devinart test</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron text-center" id="header">
+                <h1>deviantart test</h1>
+                </div>
+            </div>
+      
+            <div class="col-md-12">
+                <div class="col-md-8" id="buttonsHere">
+                  <!-- buttons go here -->
+                </div>
+         
+                <div class="col-md-4">
+                    <form>
+                        <label for="topicInput"><h4>Search</h4></label>
+                        <input type="text" id="topicInput">
+                        <button id="addSpook" type="button" class="btn btn-success">Add</button>
+                      </form>
+                </div>
+      
+                <div id = "gifsHere" class= "col-md-12 well well-lg">
+                     <!-- gifs go here -->
+                </div>
+            </div> 
+        </div>
+      </div>
+
+     <script>
+    function displaySpookyInfo() {
+    var spooky = $(this).attr("data-name");
+    // Constructing a URL to search Giphy for various spooky gifs
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+      spooky + "&api_key=r7IFXiT9CgQSHqGes7mqMrZ12J6EKcWC&limit=10";
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+        
+        var results = response.data;
+        for (var i = 0; i < results.length; i++) {
+
+          if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+            var gifDiv = $("<div>");
+            var rating = results[i].rating;
+            var pOne = $("<p>").text("Rating: " + rating);
+            var spookyImage = $("<img>").addClass("gif");
+            spookyImage.attr("src", results[i].images.fixed_width_still.url);
+            spookyImage.attr("data-still", results[i].images.fixed_width_still.url);
+            spookyImage.attr("data-animate", results[i].images.fixed_width.url);
+            spookyImage.attr("data-state", "still");
+            gifDiv.prepend(pOne);
+            gifDiv.prepend(spookyImage);
+            $("#gifsHere").prepend(gifDiv);
+          }
+        }
+      });
+  };
+     
+     
+     </script>
+</body>
+<script src="assets/javascript/app.js"></script>
+</html>
+
