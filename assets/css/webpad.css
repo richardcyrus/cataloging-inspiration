@@ -1,0 +1,20 @@
+.firepad{
+    width:700px;
+    height:450px;
+    background-color: #eec659
+
+}
+#contextmenu{
+    background-color:#ccc;
+    border-style: dashed;
+    border-width:1px;
+    width: 100px;
+    display:none;
+    position: absolute;
+}
+#contextmenu td{
+background-color: gray;
+border-style: solid;
+padding: 2px;
+padding-left:4px;
+}

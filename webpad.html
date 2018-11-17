@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="webpad.css" />
+    <script > 
+     // Initialize Firebase
+            var config = {
+              apiKey: "AIzaSyBMSVE6dOjtmKN-QAYmssrAN937PlY_BIc",
+              authDomain: "firepad-e12f7.firebaseapp.com",
+              databaseURL: "https://firepad-e12f7.firebaseio.com",
+              projectId: "firepad-e12f7",
+              storageBucket: "",
+              messagingSenderId: "818105355274"
+            };
+            firebase.initializeApp(config);
+            //firebase reference Data
+            var firepadRef = firebase.database().ref()
+            var codeMirror = CodeMirror(document.getElementById("webpad"),{linewrapping:true})
+        //Use to create firepad
+        var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,{
+            shortcuts: true,
+            toolbar: true ,
+            defaultText : "Hello,World!"
+        });
+    </script>
+    <!-- CodeMirror -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+    <!-- FireBase -->
+    <script src="https://www.gstatic.com/firebasejs/4.0.0/firebase.js"></script>
+<!--Firepad-->
+<link rel="stylesheet" href="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.css" />
+<script src="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.js"></script>
+<!--jQuery-->
+<script src="https://code.jquery.com/jquery.js"></script>
+<!--Bootstrap-->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!--Figures module-->
+        <div class ="dropdown">
+            <figure id="figure">
+                <img src ="https://picsum.photos/400x300 "class="figure-image img-fluid rounded">
+                          </figure>
+        
+        </div>
+        <div id="contextmenu">
+                <table>      
+                    <tr> 
+                    <td href="#">New</td>
+                    </tr>
+                    <tr>
+                    <td  href="#">Save</td>
+                    </tr>
+                    <tr>
+                    <td  href="#">Share</td>
+                </tr>
+                <tr>
+                    <td href="#">Delete</td>
+                    </tr>
+                </table>
+            </div>
+        <script>
+          
+
+            //contextual menu for (saving,new,sharing,delete)
+         $(document).ready(function(){
+             $(document).bind("contextmenu",function(event){
+                 $("#contextmenu").css({"top": event.pageY + "px","left" : event.pageX + "px"}).show();
+             });
+             $(document).bind("click", function(){
+                $("#contextmenu").hide();
+             });       
+            });   
+                
+            
+    //on double click function to edit the canvas 
+
+                //$("#webpad").dblclick(function(){
+
+               //mouse hold to move the canvas
+            
+           
+            
+              
+            </script>     
+</div>
+        
+             
+
+    
+
+    </body>
+
+</html>
