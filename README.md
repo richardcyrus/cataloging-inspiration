@@ -14,9 +14,9 @@ The concept is born from the idea of a scrapbook where you are able to add and t
 
 ## Team Members
 
-Allison Valder
-Richard Cyrus
-Wynston Saamoi
+- Allison Valder
+- Richard Cyrus
+- Wynston Saamoi
 
 ## Coding Requirements
 
@@ -25,7 +25,7 @@ Wynston Saamoi
 - Must utilize at least one new library or technology that has not been discussed in class.
 - Must have a polished front end/UI.
 - Must meet good quality coding standards (indention, naming, scoping).
-- Must **__NOT__** use alerts, confirms, or prompts.
+- Must **_NOT_** use alerts, confirms, or prompts.
 - Must have some sort of repeating element (table, columns, etc.).
 - Must use Bootstrap or an alternative CSS framework (Foundation, Materialize, etc.).
 - Must be deployed to GitHub Pages.
