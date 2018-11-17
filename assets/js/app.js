@@ -16,6 +16,7 @@
         const searchImageInput = $('.image-term');
         const searchCollections = $('.collection-search');
         const searchCollectionInput = $('.collection-term');
+        const imageCards = $('.image-set');
 
         const carouselContainer = $('.carousel-inner');
         const tagsContainer = $('.tag-cloud');
@@ -27,11 +28,9 @@
             'Authorization': 'Client-ID 181550b20f8c0d72ff4755e797725bd75195b0df6d258d10bc2f3affc9bc874a'
         };
 
-        const registerFormHandlers = function () {
+        const registerHandlers = function () {
             searchImages.on('submit', function (event) {
                 event.preventDefault();
-
-                const searchUrl = `${baseUrl}search/photos`;
 
                 const searchTerm = searchImageInput.val().trim();
 
@@ -49,22 +48,23 @@
                     findCollections(searchTerm, 1);
                 }
             });
-        };
 
-        const registerTagClickHandler = function () {
-            tagsContainer.on('click', '', function () {
-
-            });
-        };
-
-        const registerCollectionClickHandler = function () {
             collectionsContainer.on('click', 'a', function () {
                 const collectionId = $(this).attr('data-collection-id');
-                const totalPhotos = $(this).attr('data-total-photos');
-                getSingleCollection(collectionId);
-                getCollectionPhotos(collectionId, 1, totalPhotos);
+                getCollectionPhotos(collectionId);
+
+                // const totalPhotos = $(this).attr('data-total-photos');
+                // getCollectionPhotos(collectionId, 1, totalPhotos);
+            });
+
+            imageCards.on('click', '.save-photo', function (event) {
+                event.preventDefault();
+                $(this).children('span').toggleClass('fas');
+                // TODO: Save the selected image
             });
         };
+
+        /* Collection Work */
 
         const findCollections = function (term, page) {
             const searchUrl = `${baseUrl}search/collections`;
@@ -79,35 +79,7 @@
                 data: data,
                 headers: authHeader
             }).done(function (response) {
-                console.log(response);
                 return buildCollectionList(response.results);
-            });
-        };
-
-        const getSingleCollection = function (id) {
-            const searchUrl = `${baseUrl}/collections/${id}`;
-
-            $.ajax({
-                url: searchUrl,
-                headers: authHeader
-            }).done(function (response) {
-                console.log(response);
-            });
-        };
-
-        const getCollectionPhotos = function (id, page, per_page) {
-            const searchUrl = `${baseUrl}/collections/${id}/photos`;
-            const data = {
-                page: page,
-                'per_page': (per_page <= 25) ? per_page : 10,
-            };
-
-            $.ajax({
-                url: searchUrl,
-                data: data,
-                headers: authHeader
-            }).done(function (response) {
-                console.log(response);
             });
         };
 
@@ -139,6 +111,68 @@
             return $('<span/>').addClass('badge badge-primary badge-pill').text(count);
         };
 
+        const getCollectionPhotos = function (id, page = 1, per_page = 10) {
+            const searchUrl = `${baseUrl}/collections/${id}/photos`;
+            const data = {
+                page: page,
+                'per_page': per_page,
+            };
+
+            $.ajax({
+                url: searchUrl,
+                data: data,
+                headers: authHeader
+            }).done(function (response) {
+                imageCards.empty();
+                buildImages(response);
+            });
+        };
+        /* #endregion Collection Work */
+
+        /* #region Photo Work */
+        const buildImages = function (photos) {
+            photos.forEach((photo) => {
+                const image = $('<img/>')
+                    .attr({
+                        alt: photo.description,
+                        src: photo.urls.full,
+                        'data-photo-id': photo.id
+                    }).addClass('card-img-top');
+
+                buildCards(image);
+            });
+        };
+
+        const buildImageTaggingLink = function (photo) {
+            const span = $('<span/>')
+                .addClass('far fa-heart')
+                .attr('data-photo-id', photo.id);
+            const anchor = $('<a/>')
+                .attr({
+                    href: '#',
+                    'data-photo-id': photo.id
+                })
+                .addClass('save-photo');
+
+            return anchor.append('Favourite&nbsp;', span);
+        };
+
+        const buildCards = function (image) {
+            const favourite = $('<div/>')
+                .addClass('card-text text-center').append(
+                    buildImageTaggingLink({id: image.attr('data-photo-id')})
+                );
+
+            const caption = $('<div/>')
+                .addClass('card-body py-2').append(favourite);
+
+            const card = $('<div/>')
+                .addClass('card d-inline-block border-dark bg-light')
+                .append(image, caption);
+
+            imageCards.append(card);
+        };
+
         const findPhotos = function (term, page, collections, orientation) {
             const searchUrl = `${baseUrl}search/photos`;
             const data = {
@@ -165,16 +199,14 @@
                 h: height,
                 rect: rectangle
             };
-
-            const results = queryUnsplashAPI(searchUrl, data);
         };
 
-        const buildCaption = function (description) {
+        const buildCarouselCaption = function (description) {
             const h5 = $("<h5/>").text(description);
             return $("<div/>").append(h5).addClass('carousel-caption d-none d-md-block');
         };
 
-        const buildImage = function (photo) {
+        const buildCarouselImage = function (photo) {
             return $("<img/>").addClass("d-block w-100 img-fluid").attr({
                 alt: photo.description,
                 src: photo.urls.small,
@@ -184,19 +216,15 @@
 
         const buildCarouselItem = function (photo, active) {
             return $("<div/>").addClass(`carousel-item ${active}`)
-                .append(buildImage(photo), buildCaption(photo.description));
+                .append(buildCarouselImage(photo), buildCarouselCaption(photo.description));
         };
 
-        const queryUnsplashAPI = function(url, data) {
+        /* #endregion Photo Work */
 
-            if (! data) {
-                data = {};
-            }
-        };
+        /* Module Setup */
 
         const setup = function () {
-            registerFormHandlers();
-            registerCollectionClickHandler();
+            registerHandlers();
         };
 
         return {
